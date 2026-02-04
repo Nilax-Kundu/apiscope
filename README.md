@@ -1,172 +1,196 @@
-Observed API Drift
+# ObservedAPIdrift
 
-Observed API Drift is a diagnostic tool that compares documented API behavior with observed runtime behavior using real traffic samples.
+ObservedAPIdrift is a diagnostic tool that compares documented API behavior
+(OpenAPI specifications) with **observed runtime behavior** derived from real
+traffic samples.
 
-It reports evidence of divergence, not truth or intent.
+It reports **evidence of divergence**, not truth, intent, or correctness.
 
-The goal is to help API maintainers understand how production behavior relates to documentation — with context, uncertainty, and restraint.
+The goal is to help API maintainers understand how production behavior relates
+to documentation — with explicit context, visible uncertainty, and deliberate
+restraint.
 
-Problem Statement
+---
+
+## Problem Statement
 
 In real systems, API documentation and runtime behavior often diverge:
 
-documentation lags behind production changes
+- documentation lags behind production changes  
+- behavior varies by parameters, time, or rollout strategy  
+- legacy paths persist for backward compatibility  
+- specifications encode intent, not reality  
 
-behavior varies by parameters, time, or rollout
+Some divergence is inevitable — and in many cases, intentional.
 
-legacy paths persist for compatibility
+Most existing tools fall into one of two camps:
 
-specs encode intent, not reality
+- **spec-first tools** that enforce contracts without observing reality  
+- **traffic observers** that surface data without explaining meaning  
 
-Some divergence is inevitable and, in some cases, intentional.
+ObservedAPIdrift sits between these extremes.
 
-Most tools either:
+---
 
-enforce specs without observing reality, or
+## Goals
 
-observe traffic without explaining meaning
+### 1. Observe behavior, not assert correctness
 
-This tool sits in between.
+The system builds an observed behavior model from runtime traffic and compares
+it against a provided OpenAPI specification.
 
-Goals
-1. Observe behavior, not assert correctness
-
-The system builds an observed behavior model from runtime traffic and compares it against a provided OpenAPI specification.
-
-It does not decide what is correct.
+It does **not** decide what is correct.  
 It reports what was observed, with evidence.
 
-2. Surface drift with context and confidence
+---
 
-All findings include:
+### 2. Surface drift with context and confidence
 
-time window of observation
+All findings include explicit context:
 
-sample counts
+- observation time window  
+- sample counts  
+- observed variants  
+- confidence indicators  
 
-observed variants
+Uncertainty is surfaced, not hidden.
 
-confidence indicators
+---
 
-Uncertainty is explicit, not hidden.
-
-3. Prioritize attention, not exhaustiveness
+### 3. Prioritize attention, not exhaustiveness
 
 By default, output focuses on:
 
-high-severity
+- high-severity findings  
+- high-confidence signals  
+- recent observations  
 
-high-confidence
-
-recent findings
-
-Lower-impact observations remain available but are not forced into the default view.
+Lower-impact observations remain available but are not forced into the default
+view.
 
 The tool is designed to respect limited human attention.
 
-4. Support understanding, not enforcement
+---
+
+### 4. Support understanding, not enforcement
 
 Outputs are phrased to:
 
-explain what changed and when
+- explain **what changed** and **when**  
+- avoid attributing cause or blame  
+- avoid authoritative or contractual language  
 
-avoid attributing cause or blame
+ObservedAPIdrift is a diagnostic assistant, not a policy engine.
 
-avoid authoritative or contractual language
+---
 
-The tool is a diagnostic assistant, not a policy engine.
+### 5. Fail gracefully and affirm success
 
-5. Fail gracefully and affirm success
+When no significant drift is detected, the tool emits an affirmative
+confirmation indicating:
 
-When no significant drift is detected, the tool emits a positive confirmation indicating:
+- the observation window  
+- the volume of traffic analyzed  
 
-the observation window
+Silence is avoided. Successful observation is acknowledged explicitly.
 
-the volume of traffic analyzed
+---
 
-Silence is avoided; successful observation is acknowledged.
+## What This Looks Like in Practice
 
-What This Looks Like in Practice
+Example output might report that a response field appears in **18% of samples**
+over a **7-day window**, with **low confidence**, suggesting conditional or
+client-specific behavior rather than a stable contract.
 
-Example output might report that a response field appears in 18% of samples over a 7-day window, with low confidence, suggesting conditional or client-specific behavior rather than a stable contract.
+Findings are presented as **observations**, not conclusions.
 
-Findings are presented as observations, not conclusions.
+---
 
-Non-Goals
+## Non-Goals
 
-This project intentionally does not attempt to:
+This project intentionally does **not** attempt to:
 
-✗ Infer intent
+### ✗ Infer intent  
+Observed behavior is not assumed to represent design intent or contractual
+guarantees.
 
-Observed behavior is not assumed to represent design intent or contractual guarantees.
+### ✗ Enforce specifications  
+The tool does not mark APIs as compliant or non-compliant and does not block
+deploys or changes.
 
-✗ Enforce specifications
+### ✗ Attribute root cause  
+It does not explain *why* behavior changed or link drift to:
 
-The tool does not mark APIs as compliant or non-compliant and does not block deploys or changes.
+- code changes  
+- deploys  
+- feature flags  
+- configuration  
 
-✗ Attribute root cause
+Only *what changed* and *when* is reported.
 
-It does not explain why behavior changed or link drift to:
-
-code changes
-
-deploys
-
-feature flags
-
-configuration
-
-Only what changed and when is reported.
-
-✗ Automatically modify documentation
-
-Documentation updates are suggested as diffs for human review.
+### ✗ Automatically modify documentation  
+Documentation updates may be suggested as diffs for human review.  
 No automatic overwrites or commits are performed.
 
-✗ Guarantee coverage or completeness
-
+### ✗ Guarantee coverage or completeness  
 Observed behavior depends on:
 
-traffic volume
-
-client diversity
-
-capture window
+- traffic volume  
+- client diversity  
+- capture window  
 
 Sampling bias is acknowledged and surfaced, not eliminated.
 
-✗ Replace tests, reviews, or ownership
-
-This tool complements existing engineering practices.
+### ✗ Replace tests, reviews, or ownership  
+ObservedAPIdrift complements existing engineering practices.  
 It does not replace:
 
-contract tests
+- contract tests  
+- code review  
+- architectural decisions  
+- human judgment  
 
-code review
+---
 
-architectural decisions
-
-human judgment
-
-Intended User
+## Intended User
 
 The primary audience is:
 
-API maintainers assessing whether documentation reasonably reflects observed production behavior.
+**API maintainers assessing whether documentation reasonably reflects observed
+production behavior.**
 
-Other roles (platform teams, client teams, on-call engineers) may benefit incidentally, but the system is designed around this primary persona.
+Other roles — platform teams, client teams, on-call engineers — may benefit
+incidentally, but the system is designed around this primary persona.
 
-Design Principle (Invariant)
+---
 
-Every output must communicate uncertainty, context, and non-authority.
+## Design Principle (Invariant)
+
+**Every output must communicate uncertainty, context, and non-authority.**
 
 If a feature cannot uphold this invariant, it does not ship.
 
-This principle governs defaults, language, severity ranking, and future extensions.
+This principle governs defaults, language, severity ranking, and all future
+extensions.
 
-Status
+See [REFUSALS.md](REFUSALS.md) and [docs/INVARIANTS.md](docs/INVARIANTS.md) for
+the full design constraints.
 
-This project is intentionally scoped to a single service, JSON REST APIs, and read-only observation in its initial version.
+---
 
-Future work is constrained by the same philosophy:
-clarity over completeness, trust over cleverness.
+## Getting Started
+
+See [GETTING_STARTED.md](GETTING_STARTED.md) for installation instructions,
+usage examples, and V1 / V2 / V3 mode explanations.
+
+---
+
+## Project Status
+
+ObservedAPIdrift is intentionally complete.
+
+The system reached its final design at **V3 (Safe Usability Frontier)**.
+Further feature development would require revisiting core invariants around
+interpretation, authority, and misuse.
+
+The project is maintained for correctness and bug fixes only.

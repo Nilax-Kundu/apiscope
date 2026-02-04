@@ -1,225 +1,214 @@
-The pressures this system should permanently refuse
+# Refusals
 
-Not because they’re hard.
-Not because they’re unethical.
-But because they collapse evidence into authority, and once that happens, trust never fully recovers.
+This document defines pressures that ObservedAPIdrift must **permanently refuse**.
 
-1. Causal attribution pressure
+Not because they are hard.  
+Not because they are unethical.  
+But because they collapse **evidence into authority** — and once that happens,
+trust never fully recovers.
 
-“Can you tell us why this changed?”
+These refusals are structural, not negotiable.
+If a feature violates any of them, it does not ship.
 
-This is the most dangerous one.
+---
 
-Time + change creates an almost irresistible pull toward explanation:
+## 1. Causal Attribution
 
-deploys
+> “Can you tell us *why* this changed?”
 
-commits
+This is the most dangerous pressure.
 
-feature flags
+Time plus change creates an almost irresistible pull toward explanation:
 
-config toggles
+- deploys  
+- commits  
+- feature flags  
+- configuration changes  
 
 The moment the system says:
 
-“This likely happened because…”
+> “This likely happened because…”
 
 …it stops being an observation tool and becomes a story generator.
 
-Why it must be refused permanently:
+### Why this must be refused permanently
 
-temporal correlation ≠ causation
+- temporal correlation is not causation  
+- partial visibility guarantees incorrect attribution  
+- incorrect attribution gets acted on with confidence  
 
-partial visibility guarantees wrong attributions
+Once a tool explains *why* even occasionally, users will treat it as
+authoritative *all the time*.
 
-wrong attributions get acted on confidently
+ObservedAPIdrift must never cross this line.
 
-Once a tool sometimes explains why, users will treat it as authoritative all the time.
+---
 
-This system should never cross that line.
+## 2. Blame and Ownership
 
-2. Blame and ownership pressure
+> “Which team owns this drift?”  
+> “Can we route this to the right on-call?”
 
-“Can you show which team owns this drift?”
-“Can we route this to the right on-call?”
+This is where diagnostic tools become weapons.
 
-This is where tools get weaponized.
+Ownership feels operationally reasonable, but it quietly transforms:
 
-Ownership feels operationally reasonable, but it quietly turns:
+- observations into accusations  
+- evidence into leverage  
+- dashboards into arbitration tools  
 
-observations into accusations
+### Why this must be refused
 
-evidence into leverage
+- ownership models are social, not technical  
+- partial ownership is worse than no ownership  
+- blame destroys adoption faster than noise  
 
-dashboards into arbitration tools
+A tool that can be used to win arguments **will** be used that way.
 
-Why it must be refused:
+---
 
-ownership models are social, not technical
+## 3. Enforcement
 
-partial ownership is worse than no ownership
+> “Can this block deploys?”  
+> “Can we fail CI if drift is detected?”
 
-blame erodes adoption faster than noise
-
-A tool that can be used to win arguments will be used that way.
-
-3. Enforcement pressure
-
-“Can this block deploys?”
-“Can we fail CI if drift is detected?”
-
-This is the line between diagnostic and gatekeeper.
+This is the boundary between diagnostic and gatekeeper.
 
 Once enforcement exists:
 
-findings become verdicts
+- findings become verdicts  
+- uncertainty becomes unacceptable  
+- edge cases turn into outages  
 
-uncertainty becomes unacceptable
+### Why this must be refused
 
-edge cases turn into outages
+- enforcement demands false precision  
+- false positives become production incidents  
+- epistemic humility disappears  
 
-Why it must be refused:
+Enforcement requires authority.  
+This system is explicitly designed **not to have any**.
 
-enforcement demands false precision
+---
 
-false positives become production incidents
+## 4. Recommendations
 
-the tool’s epistemic humility disappears
-
-Enforcement requires authority.
-This system is explicitly designed not to have any.
-
-4. Recommendation pressure
-
-“What should we do about this?”
-“Can it suggest fixes?”
+> “What should we do about this?”  
+> “Can it suggest fixes?”
 
 This sounds helpful. It isn’t.
 
-Recommendations require:
+Recommendations require context the system cannot possess:
 
-intent
+- intent  
+- business risk  
+- backward compatibility guarantees  
+- client expectations  
 
-business context
+### Why this must be refused
 
-risk tolerance
-
-backward-compatibility knowledge
-
-client expectations
-
-The system has none of these.
-
-Why it must be refused:
-
-recommendations imply responsibility
-
-responsibility implies authority
-
-authority implies trust the system cannot earn
+- recommendations imply responsibility  
+- responsibility implies authority  
+- authority implies trust the system cannot earn  
 
 The moment a tool tells people what to do, it owns the outcome.
 
-5. Impact scoring pressure
+---
 
-“How bad is this?”
-“What’s the client impact?”
+## 5. Impact Scoring
+
+> “How bad is this?”  
+> “What’s the client impact?”
 
 Impact sounds measurable. It almost never is.
 
 Real impact depends on:
 
-which clients
+- which clients  
+- which usage paths  
+- contractual guarantees  
+- undocumented assumptions  
 
-which usage paths
+### Why this must be refused
 
-contractual guarantees
+- estimated impact becomes de facto truth  
+- quantified uncertainty feels authoritative  
+- prioritization gets outsourced to partial visibility  
 
-undocumented assumptions
+This system can show **change**.  
+It cannot show **consequence**.
 
-Why it must be refused:
+---
 
-impact estimates become de facto truth
+## 6. Narrative Generation
 
-low confidence feels high confidence when quantified
+> “Can you summarize what happened?”  
+> “Give me a story for the incident report.”
 
-prioritization decisions get outsourced to a partial view
-
-This system can show change.
-It cannot show consequence.
-
-6. Narrative pressure
-
-“Can you summarize what happened?”
-“Give me a story for the incident report.”
-
-This is subtle, and it’s deadly.
+This pressure is subtle — and deadly.
 
 Narratives:
 
-remove ambiguity
+- compress ambiguity  
+- remove uncertainty  
+- feel complete even when wrong  
 
-compress uncertainty
+### Why this must be refused
 
-feel complete even when wrong
+- stories outlive evidence  
+- stories get copy-pasted  
+- stories harden into institutional memory  
 
-Why it must be refused:
+ObservedAPIdrift outputs structured evidence, not stories.
 
-stories outlive evidence
+Humans may write narratives — visibly, explicitly, and accountably.
 
-stories get copy-pasted
+---
 
-stories harden into institutional memory
+## 7. Completeness Claims
 
-This system should output raw, structured truth, not stories.
-
-Let humans write the narrative — visibly, accountably.
-
-7. Completeness pressure
-
-“Can it catch all drift?”
-“Can we trust this as the source of truth?”
+> “Can it catch all drift?”  
+> “Can we treat this as the source of truth?”
 
 Completeness is a lie in observability.
 
-Why it must be refused:
+### Why this must be refused
 
-sampling bias is irreducible
+- sampling bias is irreducible  
+- partial coverage is inevitable  
+- claims of completeness create false safety  
 
-partial coverage is inevitable
+The system must always feel **incomplete but honest**,  
+never **complete but fragile**.
 
-claiming completeness creates false safety
+---
 
-The system should always feel incomplete but honest, never complete but fragile.
+## 8. Normalization Without Evidence Decay
 
-8. Normalization pressure
-
-“This drift keeps happening — can we just treat it as normal?”
+> “This keeps happening — can we just treat it as normal?”
 
 This is how blind spots form.
 
-You handled this correctly with benign drift:
+Benign drift is allowed only because:
 
-evidence remains
+- evidence remains visible  
+- suppression is reversible  
+- nothing is erased  
 
-visibility is reduced
+### What must be refused
 
-nothing is erased
+- permanent ignores  
+- silent suppression  
+- “don’t show this again” semantics  
 
-What must be refused:
+Normalization without decay of evidence is how systems lie to themselves.
 
-permanent ignores
+---
 
-silent suppression
+## The One-Sentence Rule
 
-“don’t show this again”
+If this had to be written on the wall of the repository:
 
-Normalization without evidence decay is how systems lie to themselves.
+> **ObservedAPIdrift must never collapse evidence into judgment.**
 
-The one-sentence answer
-
-If you had to write this on the wall of the repo, it would be:
-
-ObservedAPIdrift must never collapse evidence into judgment.
-
-Everything else follows from that.
+Everything else follows from this.

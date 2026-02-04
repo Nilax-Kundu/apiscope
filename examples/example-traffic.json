@@ -1,0 +1,73 @@
+[
+    {
+        "timestamp": "2026-02-03T10:00:00Z",
+        "method": "GET",
+        "path": "/api/users/123",
+        "statusCode": 200,
+        "responseBody": {
+            "id": 123,
+            "name": "Alice",
+            "email": "alice@example.com"
+        }
+    },
+    {
+        "timestamp": "2026-02-03T10:01:00Z",
+        "method": "GET",
+        "path": "/api/users/124",
+        "statusCode": 200,
+        "responseBody": {
+            "id": 124,
+            "name": "Bob",
+            "email": "bob@example.com",
+            "phone": "+1234567890"
+        }
+    },
+    {
+        "timestamp": "2026-02-03T10:02:00Z",
+        "method": "GET",
+        "path": "/api/users/125",
+        "statusCode": 200,
+        "responseBody": {
+            "id": 125,
+            "name": "Charlie",
+            "email": "charlie@example.com"
+        }
+    },
+    {
+        "timestamp": "2026-02-03T10:03:00Z",
+        "method": "GET",
+        "path": "/api/users/999",
+        "statusCode": 404,
+        "responseBody": {
+            "error": "User not found"
+        }
+    },
+    {
+        "timestamp": "2026-02-03T10:04:00Z",
+        "method": "POST",
+        "path": "/api/users",
+        "statusCode": 201,
+        "requestBody": {
+            "name": "Dave",
+            "email": "dave@example.com"
+        },
+        "responseBody": {
+            "id": 126,
+            "name": "Dave"
+        }
+    },
+    {
+        "timestamp": "2026-02-03T10:05:00Z",
+        "method": "POST",
+        "path": "/api/users",
+        "statusCode": 201,
+        "requestBody": {
+            "name": "Eve"
+        },
+        "responseBody": {
+            "id": 127,
+            "name": "Eve",
+            "createdAt": "2026-02-03T10:05:00Z"
+        }
+    }
+]
