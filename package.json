@@ -1,0 +1,26 @@
+{
+  "name": "observed-api-drift",
+  "version": "0.1.0",
+  "description": "Diagnostic tool that compares documented API behavior with observed runtime behavior",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "dev": "tsx src/index.ts"
+  },
+  "keywords": ["api", "drift", "observability", "openapi"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.19",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "yaml": "^2.3.4"
+  }
+}
