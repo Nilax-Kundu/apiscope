@@ -1,4 +1,4 @@
-# Getting Started with ObservedAPIdrift
+# Getting Started with apiscope
 
 ## Quick Start
 
@@ -10,7 +10,7 @@ npm install
 npm run build
 
 # Run V3 analysis (Recommended)
-node dist/index.js <spec-file> <traffic-file> \
+apiscope <spec-file> <traffic-file> \
   --v2 --service-name my-api --environment prod \
   --v3 --compact
 ```
@@ -23,7 +23,7 @@ This tool has evolved through three versions, all currently supported. Features 
 Simple, stateless comparison of spec vs. traffic.
 
 ```bash
-node dist/index.js openapi.yaml traffic.json
+apiscope openapi.yaml traffic.json
 ```
 *   **Best for:** CI/CD one-off checks, local debugging.
 *   **Outputs:** Standard JSON report of immediate drift.
@@ -32,7 +32,7 @@ node dist/index.js openapi.yaml traffic.json
 Adds history, trends, and change detection over time.
 
 ```bash
-node dist/index.js openapi.yaml traffic.json \
+apiscope openapi.yaml traffic.json \
   --v2 --service-name <name> --environment <env>
 ```
 *   **Best for:** Production monitoring, tracking regression.
@@ -45,7 +45,7 @@ node dist/index.js openapi.yaml traffic.json \
 Adds human-centric presentation features without interpretation.
 
 ```bash
-node dist/index.js openapi.yaml traffic.json \
+apiscope openapi.yaml traffic.json \
   --v2 --service-name <name> --environment <env> \
   --v3 --compact --group-by endpoint
 ```

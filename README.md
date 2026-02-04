@@ -1,8 +1,8 @@
-# ObservedAPIdrift
+# apiscope
 
-ObservedAPIdrift is a diagnostic tool that compares documented API behavior
-(OpenAPI specifications) with **observed runtime behavior** derived from real
-traffic samples.
+**apiscope** (formerly ObservedAPIdrift) is a diagnostic tool that compares
+documented API behavior (OpenAPI specifications) with **observed runtime
+behavior** derived from real traffic samples.
 
 It reports **evidence of divergence**, not truth, intent, or correctness.
 
@@ -28,7 +28,7 @@ Most existing tools fall into one of two camps:
 - **spec-first tools** that enforce contracts without observing reality  
 - **traffic observers** that surface data without explaining meaning  
 
-ObservedAPIdrift sits between these extremes.
+**apiscope** sits between these extremes.
 
 ---
 
@@ -80,7 +80,7 @@ Outputs are phrased to:
 - avoid attributing cause or blame  
 - avoid authoritative or contractual language  
 
-ObservedAPIdrift is a diagnostic assistant, not a policy engine.
+**apiscope** is a diagnostic assistant, not a policy engine.
 
 ---
 
@@ -142,7 +142,7 @@ Observed behavior depends on:
 Sampling bias is acknowledged and surfaced, not eliminated.
 
 ### ✗ Replace tests, reviews, or ownership  
-ObservedAPIdrift complements existing engineering practices.  
+**apiscope** complements existing engineering practices.  
 It does not replace:
 
 - contract tests  
@@ -187,7 +187,7 @@ usage examples, and V1 / V2 / V3 mode explanations.
 
 ## Project Status
 
-ObservedAPIdrift is intentionally complete.
+**apiscope** is intentionally complete.
 
 The system reached its final design at **V3 (Safe Usability Frontier)**.
 Further feature development would require revisiting core invariants around

@@ -1,6 +1,6 @@
-# ObservedAPIdrift — V3 Implementation Walkthrough
+# **apiscope** — V3 Implementation Walkthrough
 
-This document explains how ObservedAPIdrift V3 is structured and why its
+This document explains how **apiscope** V3 is structured and why its
 implementation choices matter.
 
 V3 introduces **safe usability improvements** — features that increase
@@ -230,7 +230,7 @@ All existing V1 and V2 tests continue to pass.
 
 ## Status
 
-V3 completes the intended scope of **ObservedAPIdrift**.
+V3 completes the intended scope of **apiscope**.
 
 No further features are planned unless they:
 

@@ -1,7 +1,7 @@
 # Longitudinal Design Invariants (V2)
 
 This document defines the invariants introduced with V2, which extends
-ObservedAPIdrift from single-run diagnostics to longitudinal observation
+**apiscope** from single-run diagnostics to longitudinal observation
 across multiple runs.
 
 All V1 invariants remain in full force.

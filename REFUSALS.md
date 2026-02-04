@@ -1,6 +1,6 @@
 # Refusals
 
-This document defines pressures that ObservedAPIdrift must **permanently refuse**.
+This document defines pressures that **apiscope** must **permanently refuse**.
 
 Not because they are hard.  
 Not because they are unethical.  
@@ -40,7 +40,7 @@ The moment the system says:
 Once a tool explains *why* even occasionally, users will treat it as
 authoritative *all the time*.
 
-ObservedAPIdrift must never cross this line.
+**apiscope** must never cross this line.
 
 ---
 
@@ -159,7 +159,7 @@ Narratives:
 - stories get copy-pasted  
 - stories harden into institutional memory  
 
-ObservedAPIdrift outputs structured evidence, not stories.
+**apiscope** outputs structured evidence, not stories.
 
 Humans may write narratives — visibly, explicitly, and accountably.
 
@@ -209,6 +209,6 @@ Normalization without decay of evidence is how systems lie to themselves.
 
 If this had to be written on the wall of the repository:
 
-> **ObservedAPIdrift must never collapse evidence into judgment.**
+> **apiscope must never collapse evidence into judgment.**
 
 Everything else follows from this.

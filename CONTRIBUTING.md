@@ -1,9 +1,9 @@
-# Contributing to ObservedAPIdrift
+# Contributing to **apiscope**
 
 Contributions are welcome — provided they respect the project’s
 non-negotiable design constraints.
 
-ObservedAPIdrift is intentionally conservative.
+**apiscope** is intentionally conservative.
 Not all “useful” features are acceptable.
 
 Please read this document before opening a pull request.
@@ -72,7 +72,7 @@ invariant documents themselves.
 
 ## Philosophy Matters Here
 
-ObservedAPIdrift is designed to be **hard to misuse**.
+**apiscope** is designed to be **hard to misuse**.
 
 If a contribution makes it easier to:
 - assign blame

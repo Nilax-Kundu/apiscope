@@ -1,6 +1,6 @@
 # Invariants
 
-This document defines the **non-negotiable invariants** of ObservedAPIdrift.
+This document defines the **non-negotiable invariants** of **apiscope**.
 
 These invariants are treated as **constraints**, not suggestions.
 

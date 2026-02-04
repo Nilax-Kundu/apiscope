@@ -1,15 +1,23 @@
 {
-  "name": "observed-api-drift",
+  "name": "apiscope",
   "version": "0.1.0",
   "description": "Diagnostic tool that compares documented API behavior with observed runtime behavior",
   "main": "dist/index.js",
+  "bin": {
+    "apiscope": "./dist/index.js"
+  },
   "type": "module",
   "scripts": {
     "build": "tsc",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "dev": "tsx src/index.ts"
   },
-  "keywords": ["api", "drift", "observability", "openapi"],
+  "keywords": [
+    "api",
+    "drift",
+    "observability",
+    "openapi"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {

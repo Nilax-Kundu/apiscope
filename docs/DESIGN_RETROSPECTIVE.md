@@ -1,8 +1,8 @@
-# Design Retrospective — ObservedAPIdrift (V1 → V2)
+# Design Retrospective — **apiscope** (V1 → V2)
 
 ## Context
 
-ObservedAPIdrift was built to explore a recurring tension in backend and
+**apiscope** was built to explore a recurring tension in backend and
 platform systems:
 
 **How do we surface useful insight from production behavior without turning
