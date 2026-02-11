@@ -1,14 +1,15 @@
 # apiscope
 
-**apiscope** (formerly ObservedAPIdrift) is a diagnostic tool that compares
-documented API behavior (OpenAPI specifications) with **observed runtime
-behavior** derived from real traffic samples.
+**apiscope** is a diagnostic tool that compares OpenAPI specifications with how
+APIs actually behave in production.
 
-It reports **evidence of divergence**, not truth, intent, or correctness.
+It analyzes real traffic samples to surface where documented behavior and
+observed behavior diverge — with evidence, context, and explicit uncertainty.
 
-The goal is to help API maintainers understand how production behavior relates
-to documentation — with explicit context, visible uncertainty, and deliberate
-restraint.
+It reports **observed divergence**, not truth, intent, or correctness.
+
+The gap between documented intent and observed behavior grows as systems evolve. The goal is to help API maintainers understand how production behavior relates
+to documentation, without enforcing contracts or inferring intent.
 
 ---
 
@@ -154,10 +155,8 @@ It does not replace:
 
 ## Intended User
 
-The primary audience is:
-
-**API maintainers assessing whether documentation reasonably reflects observed
-production behavior.**
+Designed for **engineers maintaining APIs at scale** who need to assess whether
+documentation reasonably reflects observed production behavior.
 
 Other roles — platform teams, client teams, on-call engineers — may benefit
 incidentally, but the system is designed around this primary persona.
