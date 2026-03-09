@@ -9,17 +9,30 @@ import { TrafficSample, ObservationWindow, HttpMethod } from '../types.js';
  * Builds observation window metadata from traffic samples
  */
 export function buildObservationWindow(samples: TrafficSample[]): ObservationWindow {
-    if (samples.length === 0) {
-        throw new Error('Cannot build observation window from empty samples array');
-    }
-
     let min = Infinity;
     let max = -Infinity;
+    let validCount = 0;
 
     for (const sample of samples) {
-        const ts = new Date(sample.timestamp).getTime();
+        const date = new Date(sample.timestamp);
+        const ts = date.getTime();
+        
+        if (isNaN(ts)) {
+            continue; // Skip invalid timestamps
+        }
+
         if (ts < min) min = ts;
         if (ts > max) max = ts;
+        validCount++;
+    }
+
+    if (validCount === 0) {
+        // Fallback if no valid samples, though caller should handle
+        return {
+            startTime: new Date().toISOString(),
+            endTime: new Date().toISOString(),
+            sampleCount: 0,
+        };
     }
 
     const startTime = new Date(min).toISOString();
@@ -28,7 +41,7 @@ export function buildObservationWindow(samples: TrafficSample[]): ObservationWin
     return {
         startTime,
         endTime,
-        sampleCount: samples.length,
+        sampleCount: validCount,
     };
 }
 
@@ -43,6 +56,9 @@ export function groupByEndpoint(
     const groups = new Map<string, TrafficSample[]>();
 
     for (const sample of samples) {
+        if (isNaN(new Date(sample.timestamp).getTime())) {
+            continue;
+        }
         const mappedPath = pathMapper(sample.method, sample.path);
         const key = `${sample.method} ${mappedPath}`;
         const existing = groups.get(key) || [];

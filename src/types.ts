@@ -134,7 +134,8 @@ export type DriftType =
     | 'missing-field'            // Field in spec but rarely/never observed  
     | 'type-mismatch'            // Observed type differs from spec
     | 'undocumented-status-code' // Status code observed but not in spec
-    | 'missing-status-code';     // Status code in spec but not observed
+    | 'missing-status-code'      // Status code in spec but not observed
+    | 'undocumented-endpoint';   // Endpoint observed but not in spec
 
 /**
  * Evidence of divergence between spec and observed behavior
@@ -233,7 +234,7 @@ export interface SpecEndpoint {
     path: string;
 
     /** Expected response schemas by status code */
-    responses: Record<number, JsonObject>;
+    responses: Record<number | string, JsonObject>;
 
     /** Expected request body schema (if applicable) */
     requestBody?: JsonObject;

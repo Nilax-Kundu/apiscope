@@ -20,6 +20,35 @@ export interface FieldComparison {
 }
 
 /**
+ * Recursively resolves allOf by merging properties and required arrays
+ */
+function resolveAllOf(schema: any): any {
+    if (!schema || typeof schema !== 'object') return schema;
+    if (!schema.allOf) return schema;
+
+    const merged = { 
+        ...schema, 
+        properties: { ...(schema.properties || {}) }, 
+        required: Array.isArray(schema.required) ? [...schema.required] : [] 
+    };
+
+    for (const sub of schema.allOf) {
+        const resolved = resolveAllOf(sub);
+        if (resolved.properties) {
+            merged.properties = { ...merged.properties, ...resolved.properties };
+        }
+        if (Array.isArray(resolved.required)) {
+            merged.required = [...new Set([...merged.required, ...resolved.required])];
+        }
+        if (resolved.type && !merged.type) {
+            merged.type = resolved.type;
+        }
+    }
+
+    return merged;
+}
+
+/**
  * Extracts field paths and types from JSON schema (simplified)
  */
 function extractSchemaFields(schema: any, prefix = ''): Map<string, { types: string[]; required: boolean }> {
@@ -29,11 +58,13 @@ function extractSchemaFields(schema: any, prefix = ''): Map<string, { types: str
         return fields;
     }
 
-    // Handle object schemas
-    if (schema.type === 'object' && schema.properties) {
-        const required = Array.isArray(schema.required) ? schema.required : [];
+    const effectiveSchema = resolveAllOf(schema);
 
-        for (const [propName, propSchema] of Object.entries(schema.properties)) {
+    // Handle object schemas
+    if (effectiveSchema.type === 'object' && effectiveSchema.properties) {
+        const required = Array.isArray(effectiveSchema.required) ? effectiveSchema.required : [];
+
+        for (const [propName, propSchema] of Object.entries(effectiveSchema.properties)) {
             const fieldPath = prefix ? `${prefix}.${propName}` : propName;
             const isRequired = required.includes(propName);
 
@@ -51,7 +82,7 @@ function extractSchemaFields(schema: any, prefix = ''): Map<string, { types: str
             fields.set(fieldPath, { types, required: isRequired });
 
             // Recurse for nested objects
-            if (prop.type === 'object') {
+            if (prop.type === 'object' || prop.properties || prop.allOf) {
                 const nested = extractSchemaFields(prop, fieldPath);
                 for (const [path, info] of nested) {
                     fields.set(path, info);

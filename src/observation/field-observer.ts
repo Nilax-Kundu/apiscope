@@ -11,11 +11,20 @@ import { FieldObservation, JsonValue, JsonObject } from '../types.js';
 const MAX_SAMPLE_VALUES = 10;
 
 /**
+ * Maximum traversal depth for JSON objects to prevent stack overflow
+ */
+const MAX_JSON_DEPTH = 200;
+
+/**
  * Extracts all field paths from a JSON object
  * Returns paths in dot notation (e.g., "user.email", "items[0].id")
  */
-function extractFieldPaths(obj: JsonValue, prefix = ''): Map<string, JsonValue> {
+function extractFieldPaths(obj: JsonValue, prefix = '', depth = 0): Map<string, JsonValue> {
     const fields = new Map<string, JsonValue>();
+
+    if (depth >= MAX_JSON_DEPTH) {
+        return fields;
+    }
 
     if (obj === null || obj === undefined) {
         return fields;
@@ -34,17 +43,17 @@ function extractFieldPaths(obj: JsonValue, prefix = ''): Map<string, JsonValue> 
             fields.set(prefix, obj);
         }
 
-        // For arrays, examine first element to get structure
-        if (obj.length > 0) {
-            const firstElement = obj[0];
-            const arrayPrefix = prefix ? `${prefix}[0]` : '[0]';
+        // For arrays, examine first 3 elements to get structure
+        const samples = obj.slice(0, Math.min(obj.length, 3));
+        samples.forEach((element, index) => {
+            const arrayPrefix = prefix ? `${prefix}[${index}]` : `[${index}]`;
 
             // Add the array element itself
-            fields.set(arrayPrefix, firstElement);
+            fields.set(arrayPrefix, element);
 
             // If the element is an object, recurse into it
-            if (firstElement !== null && typeof firstElement === 'object' && !Array.isArray(firstElement)) {
-                const nested = extractFieldPaths(firstElement, arrayPrefix);
+            if (element !== null && typeof element === 'object' && !Array.isArray(element)) {
+                const nested = extractFieldPaths(element, arrayPrefix, depth + 1);
                 for (const [path, value] of nested) {
                     // Skip the array element itself as we already added it
                     if (path !== arrayPrefix) {
@@ -52,7 +61,7 @@ function extractFieldPaths(obj: JsonValue, prefix = ''): Map<string, JsonValue> 
                     }
                 }
             }
-        }
+        });
     } else {
         // For objects, recurse into each property
         const jsonObj = obj as JsonObject;
@@ -61,7 +70,7 @@ function extractFieldPaths(obj: JsonValue, prefix = ''): Map<string, JsonValue> 
             fields.set(fieldPath, value);
 
             if (value !== null && typeof value === 'object') {
-                const nested = extractFieldPaths(value, fieldPath);
+                const nested = extractFieldPaths(value, fieldPath, depth + 1);
                 for (const [path, val] of nested) {
                     fields.set(path, val);
                 }

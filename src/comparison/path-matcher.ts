@@ -14,8 +14,6 @@ export class PathMatcher {
     constructor(templates: string[]) {
         for (const template of templates) {
             // Convert /users/{id} -> /^\/users\/[^/]+$/
-            // 1. Escape special regex characters (minimal for paths)
-            // 2. Replace {param} with [^/]+
             const escaped = template.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const pattern = escaped.replace(/\\{[^/]+\\}/g, '[^/]+');
             this.patterns.push({
@@ -23,6 +21,25 @@ export class PathMatcher {
                 regex: new RegExp(`^${pattern}$`)
             });
         }
+
+        // Sort by specificity:
+        // 1. Static segment count (descending)
+        // 2. Parameter segment count (ascending)
+        // 3. Length (descending)
+        this.patterns.sort((a, b) => {
+            const aSegs = a.template.split('/').filter(Boolean);
+            const bSegs = b.template.split('/').filter(Boolean);
+
+            const aStatic = aSegs.filter(s => !s.startsWith('{')).length;
+            const bStatic = bSegs.filter(s => !s.startsWith('{')).length;
+            if (aStatic !== bStatic) return bStatic - aStatic;
+
+            const aParam = aSegs.filter(s => s.startsWith('{')).length;
+            const bParam = bSegs.filter(s => s.startsWith('{')).length;
+            if (aParam !== bParam) return aParam - bParam;
+
+            return b.template.length - a.template.length;
+        });
     }
 
     /**
