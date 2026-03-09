@@ -113,15 +113,19 @@ export function detectDrift(
             }
 
             // Missing field (in spec but rarely/never observed)
-            if (comp.inSpec && comp.inObserved && comp.specRequired && (comp.observedOccurrencePercentage || 0) < 50) {
+            const isRequiredButMissing = comp.inSpec && comp.specRequired && !comp.inObserved;
+            const isRarelyObserved = comp.inSpec && comp.inObserved && comp.specRequired && (comp.observedOccurrencePercentage || 0) < 50;
+
+            if (isRequiredButMissing || isRarelyObserved) {
                 findings.push({
                     type: 'missing-field',
                     method: observation.method,
                     path: observation.path,
                     fieldPath: comp.fieldPath,
                     observed: {
-                        types: comp.observedTypes,
-                        percentage: comp.observedOccurrencePercentage,
+                        types: comp.observedTypes || [],
+                        percentage: comp.observedOccurrencePercentage || 0,
+                        count: comp.observedCount || 0,
                     },
                     documented: {
                         types: comp.specTypes,

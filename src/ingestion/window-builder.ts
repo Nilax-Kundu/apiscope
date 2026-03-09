@@ -13,9 +13,17 @@ export function buildObservationWindow(samples: TrafficSample[]): ObservationWin
         throw new Error('Cannot build observation window from empty samples array');
     }
 
-    const timestamps = samples.map(s => new Date(s.timestamp).getTime());
-    const startTime = new Date(Math.min(...timestamps)).toISOString();
-    const endTime = new Date(Math.max(...timestamps)).toISOString();
+    let min = Infinity;
+    let max = -Infinity;
+
+    for (const sample of samples) {
+        const ts = new Date(sample.timestamp).getTime();
+        if (ts < min) min = ts;
+        if (ts > max) max = ts;
+    }
+
+    const startTime = new Date(min).toISOString();
+    const endTime = new Date(max).toISOString();
 
     return {
         startTime,
@@ -26,12 +34,17 @@ export function buildObservationWindow(samples: TrafficSample[]): ObservationWin
 
 /**
  * Groups traffic samples by endpoint (method + path)
+ * Optional pathMapper can be used to normalize paths (e.g., for template matching)
  */
-export function groupByEndpoint(samples: TrafficSample[]): Map<string, TrafficSample[]> {
+export function groupByEndpoint(
+    samples: TrafficSample[],
+    pathMapper: (method: HttpMethod, path: string) => string = (_, p) => p
+): Map<string, TrafficSample[]> {
     const groups = new Map<string, TrafficSample[]>();
 
     for (const sample of samples) {
-        const key = `${sample.method} ${sample.path}`;
+        const mappedPath = pathMapper(sample.method, sample.path);
+        const key = `${sample.method} ${mappedPath}`;
         const existing = groups.get(key) || [];
         existing.push(sample);
         groups.set(key, existing);

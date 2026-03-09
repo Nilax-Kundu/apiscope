@@ -101,7 +101,7 @@ export class FieldObserver {
     observeBody(body: JsonValue | undefined): void {
         this.totalSamples++;
 
-        if (!body) {
+        if (body === undefined || body === null) {
             return;
         }
 

@@ -16,6 +16,7 @@ export interface FieldComparison {
     observedTypes?: string[];
     specRequired?: boolean;
     observedOccurrencePercentage?: number;
+    observedCount?: number;
 }
 
 /**
@@ -101,6 +102,7 @@ export function compareFields(
             observedTypes: obsInfo?.observedTypes,
             specRequired: specInfo?.required,
             observedOccurrencePercentage: obsInfo?.occurrencePercentage,
+            observedCount: obsInfo?.occurrenceCount,
         });
     }
 

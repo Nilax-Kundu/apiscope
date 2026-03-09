@@ -8,6 +8,7 @@ import { readTrafficSamples } from './ingestion/traffic-reader.js';
 import { buildObservationWindow, groupByEndpoint, parseEndpointKey } from './ingestion/window-builder.js';
 import { buildEndpointObservation } from './observation/endpoint-observer.js';
 import { loadSpec, extractEndpoints } from './comparison/spec-loader.js';
+import { PathMatcher } from './comparison/path-matcher.js';
 import { detectDrift } from './comparison/drift-detector.js';
 import { buildDriftReport } from './report/report-builder.js';
 import { createEmptyReport } from './report/empty-state.js';
@@ -70,11 +71,23 @@ async function main() {
         const trafficJson = readFileSync(trafficFile, 'utf-8');
         const samples = readTrafficSamples(trafficJson);
 
+        // Build path matcher for template support
+        const pathTemplates = Array.from(new Set(specEndpoints.map(e => e.path)));
+        const pathMatcher = new PathMatcher(pathTemplates);
+
         // Build observation window
         const globalWindow = buildObservationWindow(samples);
 
-        // Group by endpoint
-        const endpointGroups = groupByEndpoint(samples);
+        // Group by endpoint (with path normalization)
+        const endpointGroups = groupByEndpoint(samples, (method, path) => {
+            // Exact match in spec?
+            if (specMap.has(`${method} ${path}`)) {
+                return path;
+            }
+            // Template match?
+            const matched = pathMatcher.match(path);
+            return matched || path;
+        });
 
         // Build observations and detect drift
         const allFindings: DriftFinding[] = [];
